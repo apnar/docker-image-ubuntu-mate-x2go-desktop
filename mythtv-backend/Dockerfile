@@ -1,15 +1,14 @@
 FROM jokke/ubuntu-mate-x2go-desktop
 
+USER root
+
 # set correct environment variables
 ENV USER=mythtv \
     DEBIAN_FRONTEND=noninteractive \
     TERM=xterm
 
 # add repositories
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial multiverse" >> /etc/apt/sources.list && \
-    echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial multiverse" >> /etc/apt/sources.list && \
-    echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates multiverse" >> /etc/apt/sources.list && \
-    echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates multiverse" >> /etc/apt/sources.list && \
+RUN add-apt-repository universe -y && \
     apt-add-repository ppa:mythbuntu/0.28 -y && \
 
     apt-get update -qq && \
@@ -38,3 +37,5 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial multiverse" >> /etc/apt/s
 
 # expose ports (UPnP, MythTV backend + API)
 EXPOSE 5000/udp 6543 6544
+
+USER mythtv
