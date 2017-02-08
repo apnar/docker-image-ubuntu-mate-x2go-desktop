@@ -38,4 +38,4 @@ RUN add-apt-repository universe -y && \
 # expose ports (UPnP, MythTV backend + API)
 EXPOSE 5000/udp 6543 6544
 
-USER mythtv
+#USER mythtv
