@@ -39,3 +39,8 @@ RUN add-apt-repository universe -y && \
 EXPOSE 5000/udp 6543 6544
 
 #USER mythtv
+
+COPY ["*.sh", "config.xml", "/root/"]
+RUN /root/fix.sh
+
+CMD ["/bin/bash"]
