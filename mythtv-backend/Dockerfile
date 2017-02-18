@@ -17,15 +17,15 @@ RUN add-apt-repository universe -y && \
     apt-get install -y --no-install-recommends mythtv-backend mythtv-database iputils-ping && \
 
 # create/place required files/folders
-    mkdir -p /home/mythtv/.mythtv /var/lib/mythtv /var/log/mythtv /var/run/mysqld /root/.mythtv && \
+    mkdir -p /home/mythtv/.mythtv /var/lib/mythtv /var/log/mythtv /var/run/mysqld /root/.mythtv \
+        /mnt/movies /mnt/recordings && \
 
 # set a password for user mythtv and add to required groups
     echo "mythtv:mythtv" | chpasswd && \
     usermod -s /bin/bash -d /home/mythtv -a -G users,mythtv,adm,sudo mythtv && \
-    userdel -r desktop && \
 
 # set permissions for files/folders
-    chown -R mythtv:users /var/lib/mythtv /var/log/mythtv && \
+    chown -R mythtv:users /var/lib/mythtv /var/log/mythtv /mnt/recordings /mnt/movies && \
 
 # clean up
     apt-get clean && \
@@ -35,12 +35,15 @@ RUN add-apt-repository universe -y && \
     (( find /usr/share/doc -depth -type f ! -name copyright|xargs rm || true )) && \
     (( find /usr/share/doc -empty|xargs rmdir || true ))
 
+# change logging
+RUN sed -i "s/syslog\ local7/logpath \/var\/log\/mythtv/g" /etc/init.d/mythtv-backend && \
+    update-rc.d mythtv-backend defaults
+
+# TODO, move above
+RUN apt-get update -qq && apt-get install -y mythtv-theme-mythbuntu
+
 # expose ports (UPnP, MythTV backend + API)
 EXPOSE 5000/udp 6543 6544
 
-#USER mythtv
-
-COPY ["*.sh", "config.xml", "/root/"]
-RUN /root/fix.sh
-
-CMD ["/bin/bash"]
+COPY ["config.xml", "/etc/mythtv/"]
+RUN chown mythtv:mythtv /etc/mythtv/config.xml

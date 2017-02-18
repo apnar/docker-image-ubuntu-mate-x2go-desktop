@@ -4,6 +4,8 @@ MAINTAINER Joachim Wickman <joachim@wickman.in>
 
 ENV DEBIAN_FRONTEND noninteractive
 
+USER root
+
 # fix so resolvconf can be configured
 RUN echo "resolvconf resolvconf/linkify-resolvconf boolean false" | debconf-set-selections && \
 
@@ -21,15 +23,4 @@ RUN echo "resolvconf resolvconf/linkify-resolvconf boolean false" | debconf-set-
     apt-get clean && apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
 
-# scramble password
-ADD set_root_pw.sh /set_root_pw.sh
-ADD run.sh /run.sh
-RUN chmod +x /*.sh
-
 EXPOSE 22
-
-USER desktop
-
-ENTRYPOINT ["/run.sh"]
-
-CMD ["&&", "/bin/bash"]
