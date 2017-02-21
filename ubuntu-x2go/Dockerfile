@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM jokke/ubuntu-base
 
 MAINTAINER Joachim Wickman <joachim@wickman.in>
 
@@ -13,25 +13,16 @@ RUN apt-get update -y -qq && \
     apt-get update -y -qq && \
 
 # install x2go
-    apt-get install -y openssh-server pwgen \
-        x2goserver x2goserver-xsession && \
+    apt-get install -y x2goserver x2goserver-xsession && \
 
 # clean up
-    apt-get clean && apt-get autoremove && \
-    rm -rf /var/lib/apt/lists/* && \
+    apt-get autoclean && apt-get autoremove && \
+    rm -rf /var/lib/apt/lists/*
 
-# add user: desktop
-    useradd -ms /bin/bash desktop && \
-    echo "desktop:desktop" | chpasswd
+RUN mkdir -p /var/run/dbus
 
-RUN mkdir -p /var/run/dbus /var/run/sshd && \
-    sed -i "s/UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config && \
-    sed -i "s/UsePAM.*/UsePAM no/g" /etc/ssh/sshd_config && \
-    sed -i "s/PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config && \
-    sed -i "s/#PasswordAuthentication/PasswordAuthentication/g" /etc/ssh/sshd_config
-
-COPY docker-entrypoint.sh /
+COPY ["*.conf", "/etc/supervisor/conf.d/"]
 
 EXPOSE 22
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-n"]
