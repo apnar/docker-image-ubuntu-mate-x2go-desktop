@@ -15,7 +15,9 @@ RUN apk --no-cache add sudo build-base ruby-dev && \
     rm -rf /home/fluent/.gem/ruby/2.3.0/cache/*.gem && sudo -u fluent gem sources -c && \
     apk del sudo build-base ruby-dev
 
-EXPOSE 24224 5140
+EXPOSE 24224 5140 5142
 
+RUN mkdir -p /fluentd/etc/conf.user.d
+COPY ["conf.d", "/fluentd/etc/conf.d/"]
 USER fluent
 CMD exec fluentd -c /fluentd/etc/$FLUENTD_CONF -p /fluentd/plugins $FLUENTD_OPT
