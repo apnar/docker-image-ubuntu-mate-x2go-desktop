@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Arduino IDE
+Type=Application
+Categories=Development;IDE;
+Exec=/opt/arduino/arduino
+Terminal=false
+StartupNotify=true
+Icon=/opt/arduino/lib/arduino_icon.ico
