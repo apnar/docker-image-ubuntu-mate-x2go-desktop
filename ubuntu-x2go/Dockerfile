@@ -1,4 +1,4 @@
-FROM jokke/ubuntu-base
+FROM apnar/ubuntu-base
 
 MAINTAINER Joachim Wickman <joachim@wickman.in>
 

@@ -1,4 +1,4 @@
-FROM jokke/ubuntu-x2go
+FROM apnar/ubuntu-x2go
 
 MAINTAINER Joachim Wickman <joachim@wickman.in>
 
