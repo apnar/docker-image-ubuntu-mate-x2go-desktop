@@ -11,23 +11,21 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 RUN locale-gen en_US.UTF-8 && \
-# add Mate repositoires
-    apt-add-repository -y ppa:ubuntu-mate-dev/xenial-mate > /dev/null 2>&1 && \
     apt-get update -y -qq && \
     apt-get dist-upgrade -y && \
-
-# install supervisor and openssh
-    apt-get install -y supervisor openssh-server pwgen && \
-# install Mate
-    apt-get install -y --no-install-recommends ubuntu-mate-core x2gomatebindings && \
-
-# add x2go repository
     apt-get install software-properties-common -y && \
+
+# add Mate and x2go repositoires
+    add-apt-repository ppa:ubuntu-mate-dev/xenial-mate && \
     add-apt-repository ppa:x2go/stable && \
     apt-get update -y -qq && \
 
-# install x2go
+# install supervisor and openssh
+    apt-get install -y supervisor openssh-server pwgen vim && \
+
+# install x2go and Mate
     apt-get install -y x2goserver x2goserver-xsession && \
+    apt-get install -y --no-install-recommends ubuntu-mate-core x2gomatebindings && \
 
 # clean up
     apt-get autoclean && apt-get autoremove && \
