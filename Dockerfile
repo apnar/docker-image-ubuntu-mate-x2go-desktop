@@ -10,10 +10,10 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN locale-gen en_US.UTF-8 && \
-    apt-get update -y -qq && \
+RUN apt-get update -y -qq && \
     apt-get dist-upgrade -y && \
-    apt-get install software-properties-common -y && \
+    apt-get install locales software-properties-common -y && \
+    locale-gen en_US.UTF-8 && \
 
 # add Mate and x2go repositoires
     add-apt-repository ppa:ubuntu-mate-dev/xenial-mate && \
